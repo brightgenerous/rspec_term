@@ -9,10 +9,12 @@ class RSpecTerm::Configure
                 :success_file, :success_url,
                 :failure_file, :failure_url,
                 :nothing_file, :nothing_url,
-                :tmp_dir
+                :tmp_dir,
+                :process
 
   def self.configure &block
-    block.call instance
+    block.call instance if block_given?
+    instance
   end
 
 end

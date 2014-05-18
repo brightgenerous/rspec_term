@@ -7,14 +7,13 @@ module RSpecTerm
   autoload :Formatters, 'rspec_term/formatters'
 
   def self.configure &block
-    Configure.configure &block if block_given?
-    Configure.configure
+    Configure.configure &block
   end
 
 end
 
 RSpec.configure do |config|
-  formatter = RSpecTerm::Formatters::BackgroundFormatter.new RSpecTerm.configure
+  formatter = RSpecTerm::Formatters::BackgroundFormatter.new RSpecTerm::Configure.instance
   config.reporter.register_listener(formatter, :start, :dump_summary)
 end
 

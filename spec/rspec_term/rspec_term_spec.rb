@@ -7,6 +7,7 @@ describe RSpecTerm do
     it "arguments" do
       expect{ RSpecTerm::Configure.new }.to raise_error
       expect(RSpecTerm::Configure.instance).not_to be_nil
+      expect(RSpecTerm.configure).to be RSpecTerm::Configure.instance
       methods = [
                   :success_file, :success_file=,
                   :success_url,  :success_url=,
@@ -16,9 +17,11 @@ describe RSpecTerm do
                   :failure_url,  :failure_url=,
                   :nothing_file, :nothing_file=,
                   :nothing_url,  :nothing_url=,
-                  :tmp_dir,      :tmp_dir=
+                  :tmp_dir,      :tmp_dir=,
+                  :process,      :process=
                 ]
       expect(methods - RSpecTerm::Configure.instance_methods).to eq []
+      expect(methods - RSpecTerm.configure.methods).to eq []
     end
   end
 

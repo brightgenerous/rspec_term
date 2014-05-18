@@ -45,6 +45,8 @@ class RSpecTerm::Formatters::BackgroundFormatter < RSpec::Core::Formatters::Base
   # if RSpec version is 3.0
   #   then args are Notifications::StartNotification
   def start *args
+    return unless iterm?
+
     init
 
     unless @error_message
@@ -61,6 +63,8 @@ class RSpecTerm::Formatters::BackgroundFormatter < RSpec::Core::Formatters::Base
   # if RSpec version is 3.0
   #   then args are Notifications::SummaryNotification
   def dump_summary *args
+    return unless iterm?
+
     if args.count == 4
       notification = Struct.new(:duration, :example_count, :failure_count, :pending_count).new *args
     else
@@ -107,6 +111,28 @@ class RSpecTerm::Formatters::BackgroundFormatter < RSpec::Core::Formatters::Base
       end
     end
     tmp
+  end
+
+  def iterm?
+    return @iterm unless @iterm.nil?
+    (ret, pattern) = if @config.process
+                       [`ps -e`, @config.process]
+                     else
+                       [`ps -e | grep "Term"`, /\/iTerm\z/]
+                     end
+    @iterm = if ret.is_a? String
+               ret.each_line.any? do |line|
+                 words = line.split(/\s+/)
+                 next if words.count < 4
+                 if pattern.is_a? String
+                   words[3] == pattern
+                 else
+                   words[3] =~ pattern
+                 end
+               end
+             else
+               false
+             end
   end
 
   def change_background file
