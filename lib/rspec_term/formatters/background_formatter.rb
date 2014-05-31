@@ -88,7 +88,19 @@ class RSpecTerm::Formatters::BackgroundFormatter < RSpec::Core::Formatters::Base
 
     unless @error_message
       (file, url, tmp) = if notification.failure_count == 0
-        [@config.success_file, @config.success_url, "#{@success_tmp}"]
+        coverage = nil
+        if @config.coverage and (coverage = @config.coverage.call)
+          file = if @config.coverage_file
+                   @config.coverage_file.call coverage
+                 end || @config.success_file
+          url = if @config.coverage_url
+                  @config.coverage_url.call coverage
+                end || @config.success_url
+          tmp = url_to_tmp @tmp_dir, url
+          [file, url, "#{tmp}"]
+        else
+          [@config.success_file, @config.success_url, "#{@success_tmp}"]
+        end
       else
         [@config.failure_file, @config.failure_url, "#{@failure_tmp}"]
       end
@@ -101,8 +113,12 @@ class RSpecTerm::Formatters::BackgroundFormatter < RSpec::Core::Formatters::Base
   end
 
   def set_file file, url, tmp
-    return file if File.exists? file.to_s
-    return tmp if File.exists? tmp.to_s
+    file = file.path if file and file.is_a? File
+    url = url.path if url and url.is_a? File
+    tmp = tmp.path if tmp and tmp.is_a? File
+    return file if file and File.exists? file
+    File.delete tmp if tmp and File.zero? tmp
+    return tmp if File.exists? tmp
     return tmp unless url and tmp
 
     open tmp, 'wb' do |f|

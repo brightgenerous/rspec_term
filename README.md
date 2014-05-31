@@ -1,5 +1,5 @@
 # RspecTerm
-###### ver 0.2.1
+###### ver 0.3.0
 
 RSpecの実行中や、テスト結果によってiTermの背景画像を変更する ruby gem です。  
 RSpec2, RSpec3に対応しています。
@@ -39,6 +39,17 @@ spec/spec_helper.rb ファイルに以下を記述します
       config.nothing_url = 'https://raw.githubusercontent.com/brightgenerous/rspec_term/master/images/nothing.jpg'
       config.tmp_dir = '/tmp/rspec_term'
 
+      require 'simplecov'
+      config.coverage do
+        SimpleCov.result.covered_percent
+      end
+      config.coverage_url do |coverage|
+        case coverage
+        when 70..100
+          'https://raw.githubusercontent.com/brightgenerous/rspec_term/master/images/coverage_100.jpg'
+        end
+      end
+
     end
 
 #### 基本的な使い方
@@ -53,6 +64,9 @@ spec/spec_helper.rb ファイルに以下を記述します
 * `nothing_url` : 行うべきテストがなかった場合に表示される画像のURL。  
 * `tmp_dir` : URLの画像を保存するディレクトリ。URLから生成したハッシュをファイル名として保存する。すでにファイルが存在する場合は再度ダウンロードしない。
 
+* `coverage` : coverageの値（％）を返す  
+* `coverage_file` : テストがエラーなしで終了した場合にcoverageに応じて表示される画像のファイルを返す。該当する場合は`success_file`よりも優先される。  
+* `coverage_url` : テストがエラーなしで終了した場合にcoverageに応じて表示される画像のURLを返す。該当する場合は`success_url`よりも優先される。  
 
 ## Contributing
 

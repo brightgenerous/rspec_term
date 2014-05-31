@@ -17,5 +17,32 @@ class RSpecTerm::Configure
     instance
   end
 
+  def coverage &block
+    if block_given?
+      @coverage = block
+      self
+    else
+      @coverage
+    end
+  end
+
+  def coverage_file &block
+    if block_given?
+      @coverage_file = block
+      self
+    else
+      @coverage_file
+    end
+  end
+
+  def coverage_url &block
+    if block_given?
+      @coverage_url = block
+      self
+    else
+      @coverage_url
+    end
+  end
+
 end
 
