@@ -3,7 +3,7 @@ require 'rspec_term'
 
 RSpecTerm.configure do |config|
 
-  dir = File.expand_path(File.join('../', 'images'), File.dirname(__FILE__))
+#  dir = File.expand_path(File.join('../', 'images'), File.dirname(__FILE__))
 #  config.success_file = "#{dir}/success.jpg"
 #  config.running_file = "#{dir}/running.jpg"
 #  config.failure_file = "#{dir}/failure.jpg"

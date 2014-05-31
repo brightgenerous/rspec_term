@@ -1,5 +1,5 @@
 # RspecTerm
-###### ver 0.2.0
+###### ver 0.2.1
 
 RSpecの実行中や、テスト結果によってiTermの背景画像を変更する ruby gem です。  
 RSpec2, RSpec3に対応しています。

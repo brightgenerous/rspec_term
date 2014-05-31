@@ -122,7 +122,7 @@ class RSpecTerm::Formatters::BackgroundFormatter < RSpec::Core::Formatters::Base
                      end
     @iterm = if ret.is_a? String
                ret.each_line.any? do |line|
-                 words = line.split(/\s+/)
+                 words = line.strip.split(/\s+/)
                  next if words.count < 4
                  if pattern.is_a? String
                    words[3] == pattern
